@@ -45,7 +45,7 @@ function index() {
     })
     
     
-  }, [])
+  }, [router])
 
   const addSubject = ()=>{
    
@@ -139,7 +139,7 @@ function index() {
               >
               <div onClick={()=>router.push(`/course/${index}`)} key={index}  className='h-[15rem] ring-1 bg-white ring-slate-900/5  hover:ring-sky-500 rounded-sm overflow-hidden hover:scale-105 transition-all ease-linear hover:cursor-pointer hover:shadow-xl   shadow-lg w-[15rem]'>
               <div className='w-[100%]  h-[6rem] rounded-sm  relative flex-col flex flex-grow'>
-              <Image src={subject.image} className='blur-[1.5px] divide-y divide-slate-200'  fill />
+              <Image src={subject.image} className='blur-[1.5px] divide-y divide-slate-200' alt={"subject"} fill />
               <h1 className='absolute p-2 text-xl font-semibold leading-6 text-white duration-200 group hover:underline '> 
                 {subject.title.length < 30 ? subject.title : subject.title.substring(0,26)+'...'}
                 
