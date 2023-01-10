@@ -45,7 +45,7 @@ function Index() {
     })
     
     
-  })
+  },[])
 
   const addSubject = ()=>{
    

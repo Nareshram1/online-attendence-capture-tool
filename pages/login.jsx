@@ -44,7 +44,7 @@ const Login = () => {
 
     // setLoading(false)
     setInitLoad(false);
-  });
+  },[router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
