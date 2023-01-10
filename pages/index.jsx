@@ -13,7 +13,7 @@ import { motion } from "framer-motion"
 
 
 
-function index() {
+function Index() {
 
   const [Open,setOpen] = useState(true);
   const router = useRouter()
@@ -45,7 +45,7 @@ function index() {
     })
     
     
-  }, [router])
+  })
 
   const addSubject = ()=>{
    
@@ -133,6 +133,7 @@ function index() {
             Subject.map((subject,index)=>{
              return(
               <motion.div 
+              key={index}
               initial={{ opacity: 0, scale: 0.5 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.5 }}
@@ -165,4 +166,4 @@ function index() {
   )
 }
 
-export default index
+export default Index
