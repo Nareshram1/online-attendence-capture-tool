@@ -9,21 +9,25 @@ import { RiDashboardFill } from "react-icons/ri";
 import { BsFillImageFill } from "react-icons/bs";
 import { BsPerson } from "react-icons/bs";
 import Image from "next/image";
+import Axios from 'axios'
 
-function Course() {
+function Course({classes}) {
   const router = useRouter();
   const [Open, setOpen] = useState(true);
   const { cid } = router.query;
+  console.log(classes)
+  const {classroom, stuArray, totalPercent, totalP} = classes
+  
 
   const Students = [
-    {name:"Joe Prathap P J",present:30,absent:0,image:'/profile.jpeg'},
-    {name:"Mohanraj R",present:28,absent:2,image:'/profile.jpeg',repeat:true},
+    {name:"Joe Prathap P J",email:"joe.2105043@srec.ac.in",present:30,absent:0,image:'/profile.jpeg'},
+    {name:"Mohanraj R",email:"mohanraj.2105058@srec.ac.in",present:28,absent:2,image:'/profile.jpeg',repeat:true},
 
   ]
 
   const Menus = [
     { title: "Dashboard", route: "/" },
-    { title: "Reports", icon: <AiOutlineFileText />, route: "/" },
+    { title: "Reports", icon: <AiOutlineFileText />, route: "/course/report/"+cid },
     { title: "Media", spacing: true, icon: <BsFillImageFill />, route: "/" },
     { title: "Profile", spacing: true, icon: <BsPerson />, route: "/profile" },
     { title: "Logout", icon: <AiOutlineLogout />, route: "/login" },
@@ -92,7 +96,7 @@ function Course() {
             return (
               <>
                 <li
-                  onClick={() => router.push("/")}
+                  onClick={() => router.push(menu.route)}
                   className={`flex items-center p-2  text-sm 
         text-gray-200 rounded-md cursor-pointer 
         gap-x-4 hover:bg-light-white ${menu.spacing ? "mt-9" : "mt-2"}`}
@@ -116,45 +120,56 @@ function Course() {
       </div>
 
       <div className="flex flex-col flex-grow bg-light-white p-7">
+      <h1 className="text-2xl font-semibold">{classroom.name}</h1>
+      
         <div className="flex f w-[100%] justify-center items-center mr-[10rem]">
           <hr className="w-[100%]" />
-          <button className="p-1 border w-[10%] hover:bg-green-900 hover:text-white border-green-800">
-            Generate Report
+          
+          <button className="p-1 border w-[10%] hover:bg-green-900 duration-200 ease-linear transition-all hover:text-white border-green-800">
+            Take Attendance
           </button>
         </div>
-        <h1 className="text-lg">Daily Attendence Summary Report</h1>
+        <h1 className="text-lg">Course Summary Report</h1>
         <div className="flex mt-2 justify-between gap-4 w-[100%]">
-          <div className="flex flex-col gap-2 bg-blue-500 h-[9rem] w-[100%] justify-center items-center">
-            <h1 className="text-4xl font-semibold text-white">54</h1>
+          <div className="flex flex-col gap-2 shadow-sm hover:shadow-lg hover:shadow-blue-700 duration-200 transition-all ease-linear shadow-blue-500 bg-blue-500 h-[9rem] w-[100%] justify-center items-center">
+            <h1 className="text-4xl font-semibold text-white">{classroom.students.length}</h1>
             <h1 className="text-xl font-semibold text-white">Total Students</h1>
           </div>
 
-          <div className="flex flex-col gap-2 bg-green-500 h-[9rem] w-[100%] justify-center items-center">
-            <h1 className="text-4xl font-semibold text-white">54</h1>
-            <h1 className="text-xl font-semibold text-white">Present</h1>
+          <div className="flex flex-col gap-2 
+          shadow-sm hover:shadow-lg hover:shadow-green-700 duration-200 
+          transition-all ease-linear shadow-green-500 bg-green-500 h-[9rem] w-[100%] justify-center items-center">
+            <h1 className="text-4xl font-semibold text-white">{classroom.totLec}</h1>
+            <h1 className="text-xl font-semibold text-white">Classes Conducted</h1>
           </div>
 
-          <div className="flex flex-col gap-2 bg-red-500 h-[9rem] w-[100%] justify-center items-center">
+          {/* <div className="flex flex-col gap-2
+          shadow-sm hover:shadow-lg hover:shadow-red-700 duration-200 
+          transition-all ease-linear shadow-red-500
+          bg-red-500 h-[9rem] w-[100%] justify-center items-center">
             <h1 className="text-4xl font-semibold text-white">0</h1>
             <h1 className="text-xl font-semibold text-white">Absent</h1>
-          </div>
+          </div> */}
 
-          <div className="flex flex-col gap-2 bg-orange-500 h-[9rem] w-[100%] justify-center items-center">
-            <h1 className="text-4xl font-semibold text-white">0</h1>
-            <h1 className="text-xl font-semibold text-white">Repeat Absent</h1>
+          <div className="flex flex-col gap-2
+          shadow-sm hover:shadow-lg hover:shadow-orange-700 duration-200 
+          transition-all ease-linear shadow-orange-500
+          bg-orange-500 h-[9rem] w-[100%] justify-center items-center">
+            <h1 className="text-4xl font-semibold text-white">{totalPercent && totalPercent ==100? Math.round(totalPercent):totalPercent}%</h1>
+            <h1 className="text-xl font-semibold text-white">Average Attendance</h1>
           </div>
 
           
         </div>
         <h1 className="mt-4 mb-4 text-lg">Enrolled Students</h1>
         <hr />
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center justify-center gap-4 p-4">
 
         
-       {Students.map((student)=>{
+       {/* {Students.map((student,index)=>{
         return(
             <>
-            <div className={`flex  h-[8rem]   rounded-md shadow-md ${student.repeat?"bg-red-200 shadow-red-300":"bg-white"}`}>
+            <div key={index} className={`flex  h-[8rem]   rounded-md shadow-md ${student.repeat?"bg-red-200 shadow-red-300":"bg-white"}`}>
             <div className={`relative h-[100%] w-[8%] ${student.repeat && "border-4 border-red-500"}`}>
                 <Image src={student.image} fill/>
             </div>
@@ -168,13 +183,99 @@ function Course() {
         <hr />
         </>
         )
-       })}
+       })} */}
+       <div className="flex   gap-2 flex-col rounded-md shadow-md w-[100%] bg-slate-200">
+       <div className="flex w-[100%] p-4 justify-end gap-4">
+        <button className="p-2 font-semibold text-white bg-blue-500 rounded-md shadow-md">Add Student</button>
+        
+       </div>
+       
+<div class="relative overflow-x-auto rounded-md">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    NAME
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    EMAIL
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Classes Attended
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Attendance
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {stuArray.map((student)=>{
+              return(
+                <tr key={student._id} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {student.name}
+                </th>
+                <td class="px-6 py-4">
+                    {student.email}
+                </td>
+                <td class="px-6 py-4">
+                    {student.counts}
+                </td>
+                <td class="px-6 py-4">
+                <div className="flex items-center justify-center gap-2">
+                  <h1>{student.percent}%</h1>
+                  <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+  <div class="bg-blue-600 h-2.5 rounded-full" style={{width: student.present+"%"}}></div>
+</div>
+                </div>
+                </td>
+                
+            </tr>
+              )
+            })}
+            
+        </tbody>
+    </table>
+</div>
+
+       </div>
       </div>
       
     </div>
     </div>
   );
   
+}
+
+export async function getServerSideProps(context){
+  console.log("------------------------------")
+  console.log(context.query)
+  console.log("------------------------------")
+  const {cid} = context.query
+  
+  try{
+   const {data} = await Axios.get("http:/localhost:3000/api/classroom/"+cid)
+
+   if(data.data){
+    return {props: {classes:data.data}}
+   }
+   if(!data){
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/"
+      },
+    };
+   }
+
+   
+
+
+   
+  }catch(e){
+    console.error(e)
+  }
 }
 
 export default Course;

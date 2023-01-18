@@ -22,7 +22,7 @@ const Login = () => {
     await console.log(container);
   }, []);
 
-  var [rollNo, setRollNo] = useState("");
+  var [uid, setRollNo] = useState("");
   var [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -53,8 +53,8 @@ const Login = () => {
     try {
       setLoading(true);
       const { data } = await Axios.post(
-        "https://private-autumn-pullover.glitch.me/api/users/signin",
-        { rollNo, password }
+        "api/signin",
+        { uid, password }
       );
 
       console.log(data);
@@ -106,7 +106,7 @@ const Login = () => {
                         },
                         repulse: {
                             distance: 200,
-                            duration: 0.4,
+                            duration: 5,
                         },
                     },
                 },
@@ -206,7 +206,7 @@ const Login = () => {
                 <div className="relative">
                   <input
                     name="rollNo"
-                    value={rollNo}
+                    value={uid}
                     onChange={(event) => {
                       setRollNo(event.target.value);
                     }}
@@ -232,7 +232,7 @@ const Login = () => {
               </div>
               <button
                 type="submit"
-                onClick={()=>router.push("/")}
+                // onClick={()=>router.push("/")}
                 className="p-1 w-[30%] rounded-full  mt-8 mb-2 font-semibold text-white bg-[#00BDC9] md:text-[1.2rem]"
               >
                 Login
@@ -250,5 +250,7 @@ const Login = () => {
 };
 
 //get server side props
+
+
 
 export default Login;
