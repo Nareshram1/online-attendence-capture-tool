@@ -1,6 +1,6 @@
-import Faculty from "../../../models/Faculty";
-import User from "../../../models/User";
-import Student from "../../../models/Student";
+import Faculty from "../../../models/Faculty.js";
+import User from "../../../models/User.js";
+import Student from "../../../models/Student.js";
 
 export default async function handler(req, res) {
   if (req == "POST") {

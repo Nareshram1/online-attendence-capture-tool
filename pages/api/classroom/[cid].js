@@ -1,7 +1,7 @@
-import dbConnect from "../../../lib/dbConnect";
-import Attendance from "../../../models/Attendance";
-import Class from "../../../models/Class";
-import Student from "../../../models/Student";
+import dbConnect from "../../../lib/dbConnect.js";
+import Class from "../../../models/Class.js";
+import Student from "../../../models/Student.js";
+
 
 export default async function handler(req, res) {
   const { method } = req;
