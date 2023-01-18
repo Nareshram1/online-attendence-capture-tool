@@ -1,7 +1,7 @@
 
 import Attendance from '../../../models/Attendance.js'
 import Student from '../../../models/Student.js'
-import dbConnect from '../../../lib/dbConnect.js.js.js'
+import dbConnect from '../../../lib/dbConnect.js'
 
 
 
