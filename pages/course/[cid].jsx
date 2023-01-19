@@ -226,7 +226,7 @@ function Course({classes}) {
                 <div className="flex items-center justify-center gap-2">
                   <h1>{student.percent}%</h1>
                   <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-  <div class="bg-blue-600 h-2.5 rounded-full" style={{width: student.present+"%"}}></div>
+  <div class="bg-blue-600 h-2.5 rounded-full" style={{width: student.percent+"%"}}></div>
 </div>
                 </div>
                 </td>
