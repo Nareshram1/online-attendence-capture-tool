@@ -8,7 +8,7 @@ face_detector = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 
 # Load the video
 print(sys.argv)
-cap = cv2.VideoCapture(r"C:\Users\joepr\Downloads\video.mkv")
+cap = cv2.VideoCapture(r"C:\Users\joepr\Downloads\video.mp4")
 # cap = cv2.VideoCapture(0)
 
 # Load the known faces and their names
