@@ -1,6 +1,7 @@
-import dbConnect from "../../../lib/dbConnect.js";
-import Class from "../../../models/Class.js";
-import Student from "../../../models/Student.js";
+import dbConnect from "../../../lib/dbConnect";
+import Attendance from "../../../models/Attendance";
+import Class from "../../../models/Class";
+import Student from "../../../models/Student";
 
 
 export default async function handler(req, res) {
@@ -24,7 +25,7 @@ export default async function handler(req, res) {
 
   try {
 
-    var classes = await Class.findOne({ _id: cid });
+    var classes = await Class.findById( cid );
 
     let studentPromise = classes.students.map(async (stuId) => {
      

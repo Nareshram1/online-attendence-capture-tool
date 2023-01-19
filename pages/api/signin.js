@@ -1,8 +1,8 @@
 
-import dbConnect from '../../lib/dbConnect.js'
-import User from '../../models/User.js'
+import dbConnect from '../../lib/dbConnect'
+import User from '../../models/User'
 import bcrypt from 'bcrypt';
-import Faculty from '../../models/Faculty.js';
+import Faculty from '../../models/Faculty';
 
 User
 

@@ -1,6 +1,6 @@
 
-import dbConnect from '../../lib/dbConnect.js'
-import Class from '../../models/Class.js'
+import dbConnect from '../../lib/dbConnect'
+import Class from '../../models/Class'
 
 
 
