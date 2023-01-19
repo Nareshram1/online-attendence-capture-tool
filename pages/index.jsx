@@ -169,9 +169,10 @@ export default function Index({classes}) {
   )
 }
 
-export async function getServerSideProps(){
+export async function getServerSideProps(context){
+
   try{
-   const {data} = await Axios.post("api/classroom",{fid:"63c6cfd516f7067d326af66"})
+   const {data} = await Axios.post(process.env.host+"/api/classroom",{fid:"63c6cfd516f7067d326af66"})
    return {props: {classes:data.data}}
   }catch(e){
     console.error(e)
