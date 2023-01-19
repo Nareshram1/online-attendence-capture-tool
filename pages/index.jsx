@@ -171,7 +171,7 @@ export default function Index({classes}) {
 
 export async function getServerSideProps(){
   try{
-   const {data} = await Axios.post("http://localhost:3000//api/classroom",{fid:"63c6cfd516f7067d326af66"})
+   const {data} = await Axios.post("api/classroom",{fid:"63c6cfd516f7067d326af66"})
    return {props: {classes:data.data}}
   }catch(e){
     console.error(e)

@@ -231,7 +231,7 @@ export async function getServerSideProps(context){
   const {cid} = context.query
 
   try{
-    const {data} = await Axios.get("http:/localhost:3000/api/classroom/"+cid)
+    const {data} = await Axios.get("/api/classroom/"+cid)
  
     if(data.data){
      return {props: {classes:data.data}}
