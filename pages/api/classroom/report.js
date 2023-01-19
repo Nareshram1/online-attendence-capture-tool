@@ -35,14 +35,39 @@ export default async function handler (req,res){
         var  attendance = await Attendance.findOne({AttendanceRecord:req.body.date})
         console.log(attendance)
        attendance = JSON.parse(JSON.stringify(attendance))
+       if(attendance.data.RollNo){
+        
         var studentPromise  = attendance.data.RollNo.map(async (roll)=>{
-            var students = await Student.findOne({rollNo:roll})
+            
+            try{
+                var students = await Student.findOne({rollNo:roll})
+               
+            }
+            catch(e){
+                console.log("Not Found")
+                console.error(e)
+
+            }
+        
             return students
+    
+
+           
         })
 
         var stuPromise = await Promise.all(studentPromise)
 
-        var stuArray = JSON.parse(JSON.stringify(stuPromise))
+        var StuArray = JSON.parse(JSON.stringify(stuPromise))
+
+        var stuArray = []
+
+        StuArray.forEach(element => {
+            if(element){
+                stuArray.push(element)
+            }
+        });
+
+        console.log(stuArray)
 
         stuArray.sort(dynamicSort("rollNo"))
 
@@ -51,6 +76,11 @@ export default async function handler (req,res){
 
 
         res.status(200).json({ success: true, data: stuArray })
+
+       }
+        
+
+        
       } catch (error) {
         console.log(error)
         res.status(400).json({ success: false,error:error })
