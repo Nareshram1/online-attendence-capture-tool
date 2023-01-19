@@ -7,7 +7,8 @@ from mongo import store_db
 face_detector = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 
 # Load the video
-# cap = cv2.VideoCapture('test.mkv')
+print(sys.argv)
+cap = cv2.VideoCapture(r"C:\Users\joepr\Downloads\video.mkv")
 # cap = cv2.VideoCapture(0)
 
 # Load the known faces and their names
@@ -50,8 +51,10 @@ marked = []
 s=True
 while s:
     # Read a frame from the video
-    frame = cv2.imread("temp.jpg")
-    # _,frame=cap.read()
+    # frame = cv2.imread("temp.jpg")
+    _,frame=cap.read()
+    
+   
 
     # Convert the frame to RGB
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -90,17 +93,17 @@ while s:
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
             cv2.putText(frame, "unknown", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         
-        s=False
+       
 
     # Display the frame
-    # cv2.imshow("Video", frame)
+    cv2.imshow("Video", frame)
 
     # Exit the loop if the 'q' key is pressed
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 # Release the video capture
-# cap.release()
+cap.release()
 
 data = {"Name": marked, "RollNo": marked_roll , "Class": [cid]}
 

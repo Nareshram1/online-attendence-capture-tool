@@ -18,6 +18,10 @@ function Course({classes}) {
   console.log(classes)
   const {classroom, stuArray, totalPercent, totalP} = classes
   
+  
+  const takeAttendance = ()=>{
+    router.push({pathname:"takeAttendance",query:{cid:cid,oid:1905}})
+  }
 
   const Students = [
     {name:"Joe Prathap P J",email:"joe.2105043@srec.ac.in",present:30,absent:0,image:'/profile.jpeg'},
@@ -125,7 +129,7 @@ function Course({classes}) {
         <div className="flex f w-[100%] justify-center items-center mr-[10rem]">
           <hr className="w-[100%]" />
           
-          <button className="p-1 border w-[10%] hover:bg-green-900 duration-200 ease-linear transition-all hover:text-white border-green-800">
+          <button onClick={()=>takeAttendance()} className="p-1 border w-[10%] hover:bg-green-900 duration-200 ease-linear transition-all hover:text-white border-green-800">
             Take Attendance
           </button>
         </div>
