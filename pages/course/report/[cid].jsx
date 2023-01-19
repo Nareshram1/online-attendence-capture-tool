@@ -148,7 +148,7 @@ const handleValueChange = (newValue) => {
       </div>
 
       <div className="flex flex-col flex-grow bg-light-white p-7">
-      <h1 className="text-2xl font-semibold">MIP - Mini Project</h1>
+      <h1 className="text-2xl font-semibold">{classes.classroom.name}</h1>
       
       
       <div class="flex items-center gap-4 flex-col   flex-grow ">
@@ -232,8 +232,9 @@ export async function getServerSideProps(context){
 
   try{
     const {data} = await Axios.get(process.env.host+"/api/classroom/"+cid)
- 
+   
     if(data.data){
+      console.log(data.data.classroom.name)
      return {props: {classes:data.data}}
     }
     if(!data){
