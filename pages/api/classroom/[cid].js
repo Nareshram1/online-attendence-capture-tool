@@ -47,6 +47,12 @@ export default async function handler(req, res) {
 
     let resp = await Attendance.find({ "data.Class": cid });
 
+   
+   console.log("---------------------",resp[-2])
+
+   
+  
+
     let response = JSON.parse(JSON.stringify(resp));
 
     let totalP = 0;
@@ -70,6 +76,7 @@ export default async function handler(req, res) {
 
       totalP += k;
       stuArray[i]["counts"] = k;
+
       console.log(stuArray,"UPDATED")
 
       if (classes.totLec == 0) {
@@ -99,7 +106,7 @@ export default async function handler(req, res) {
         .toFixed(2)
         .toString();
         
-      let obj = { classroom: classes, stuArray: stuArray, totalPercent: totalPercent, totalP: totalP }
+      let obj = { classroom: classes, stuArray: stuArray, totalPercent: totalPercent, totalP: totalP, prevClass: resp[-2] }
         
     res.status(200).json({ success: true, data: obj });
 

@@ -66,7 +66,7 @@ useEffect(() => {
 
 	startButton.addEventListener('click', startRecording);
 	stopButton.addEventListener('click', stopRecording);
-}, [])
+}, [cid])
 
 
 async function startRecording () {
