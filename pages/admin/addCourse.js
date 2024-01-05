@@ -1,11 +1,18 @@
-import Axios  from "axios";
+import Axios from "axios";
+import { motion } from 'framer-motion';
 import { NextPage } from "next";
 import Image from "next/legacy/image";
 import Link from "next/link";
-import {  useState } from "react";
-import { motion } from 'framer-motion';
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { AiOutlineFileText, AiOutlineLogout } from "react-icons/ai";
+import { BsArrowLeftShort, BsFillImageFill, BsPerson } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
+import { RiDashboardFill } from "react-icons/ri";
 
 const AddCourse = () => {
+  const [Open,setOpen] = useState(true);
+  const router = useRouter()
     const [CourseCode,setCourseCode] = useState("")
     const [CourseTitle,setCourseTitle] = useState("")
     const [CourseDepartment,setCourseDepartment] = useState("")
@@ -17,6 +24,12 @@ const AddCourse = () => {
     const [CommonTo,setCommonTo] = useState([])
     const [SelectedDepartment,setSelectedDepartment]= useState("");
     const [Error,setError] = useState("")
+
+    const Menus = [
+      {title:"Dashboard",route:"/"},
+      // {title:"Profile",icon:<BsPerson/>,route:"/profile"},
+      {title:"Logout",icon:<AiOutlineLogout/>,route:"/login"},
+    ];
 
     const CreateCourse = async ()=>{
         if(CommonTo.length>0){
@@ -89,6 +102,37 @@ const AddCourse = () => {
       {/*admin header*/}
       <div className="flex   w-[100%] ">
         {/* <Navbar /> */}
+        <div className={`bg-dark-purple flex-shrink-0 min-h-screen relative p-5 pt-8  ${Open ? "w-72": "w-20"}
+      duration-300`}>
+        <BsArrowLeftShort className={`bg-white text-dark-purple text-2xl  absolute -right-3 top-9
+        border border-dark-purple rounded-full cursor-pointer ${!Open && "rotate-180" }  `} onClick={()=>setOpen(!Open)}/>
+      
+      <div className='inline-flex'>
+      <CgProfile className={`bg-amber-300 transition-all ease-in ${Open && "duration-200 transition-all ease-in"} ${!Open && "rounded-all"}  text-4xl rounded-full cursor-pointer block 
+      float-left mr-2 duration-500 `}/>
+      <h1 className={`text-white origin-left font-medium text-xl duration-300
+      ${!Open && "hidden"}`}>Welcome</h1>
+    </div>
+
+   <ul className='pt-2'>
+    {Menus.map((menu,index)=>{
+      return(
+      <>
+        <li onClick={()=>router.push(menu.route)} className={`flex items-center p-2  text-sm 
+        text-gray-200 rounded-md cursor-pointer 
+        gap-x-4 hover:bg-light-white ${menu.spacing ? "mt-9" : "mt-2"}`} key={index}>
+          <span  className='block float-left text-2xl'>
+           {menu.icon? menu.icon :<RiDashboardFill />}
+          </span>
+          <span className={`flex-1 text-base font-medium ${!Open && "hidden"}`}>{menu.title}</span>
+        </li>
+      </>
+      )
+    })}
+   </ul>
+
+      
+      </div>
         <div className="flex w-[100%]">
           <div className="flex  items-center flex-col flex-grow p-[4rem]  ">
             <div  className="flex gap-4 w-[50%] p-4 flex-col scale-110   h-max">
@@ -208,7 +252,7 @@ const AddCourse = () => {
                   <option value=""  selected>Select Course Type</option>  
                   <option value="Theory">Theory</option>
                   <option value="Core">Core</option>
-                  <option value="Theory Cum Lab">Theroy Cum Lab</option>
+                  <option value="Theory Cum Lab">Theory Cum Lab</option>
                   <option value="Laboratory">Laboratory</option>
  
 
@@ -227,11 +271,7 @@ const AddCourse = () => {
           
         </div>
       </div>
-      <div className='flex text-[0.5rem] md:text-[1rem]  relative bottom-0   text-white bg-[#001529]/[89%] flex-col items-center  justify-center p-4'>
-              <h1>with ❤️ IT</h1> 
-              <h1>©Copyright 2022</h1>
-             
-            </div>
+      
             
     </div>
   );
