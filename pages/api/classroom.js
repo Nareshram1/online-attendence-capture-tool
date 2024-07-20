@@ -1,6 +1,7 @@
 
 import dbConnect from '../../lib/dbConnect'
 import Class from '../../models/Class'
+import Student from '../../models/Student'
 
 
 
@@ -18,7 +19,9 @@ export default async function handler (req,res){
     try {
     
         const  classes = await Class.find({conductedBy:req.body.fid})
+       
         console.log(req)
+
         res.status(200).json({ success: true, data: classes })
       } catch (error) {
         console.log(error)

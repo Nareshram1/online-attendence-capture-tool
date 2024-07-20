@@ -5,27 +5,33 @@ import Student from "../../../models/Student";
 
 
 export default async function handler(req, res) {
-  const { method } = req;
 
   await dbConnect();
 
   const { cid } = req.query;
 
-  function dynamicSort(property) {
-    var sortOrder = 1;
+    function dynamicSort(property) {
+    let sortOrder = 1;
     if (property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
+      sortOrder = -1;
+      property = property.substr(1);
     }
     return function (a, b) {
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        return result * sortOrder;
+      let result;
+      if (a[property] < b[property]) {
+        result = -1;
+      } else if (a[property] > b[property]) {
+        result = 1;
+      } else {
+        result = 0;
+      }
+      return result * sortOrder;
     }
-}
+  }
 
   try {
 
-    var classes = await Class.findById( cid );
+    let classes = await Class.findById( cid );
 
     let studentPromise = classes.students.map(async (stuId) => {
      
@@ -38,7 +44,7 @@ export default async function handler(req, res) {
 
     let stuArray = JSON.parse(JSON.stringify(stuPromise));
 
-    var classes = JSON.parse(JSON.stringify(classes))
+    classes = JSON.parse(JSON.stringify(classes))
 
 
     stuArray.sort(dynamicSort("rollNo"));
@@ -48,67 +54,59 @@ export default async function handler(req, res) {
     let resp = await Attendance.find({ "data.Class": cid });
 
    
-   console.log("---------------------",resp[-2])
+  //  console.log("---------------------RESPONE---------------------",JSON.parse(JSON.stringify(resp))[resp.length-2])
 
-   
+   let prevClass = JSON.parse(JSON.stringify(resp))[resp.length-2]
   
 
     let response = JSON.parse(JSON.stringify(resp));
 
+    
+
     let totalP = 0;
 
-    for (let i = 0; i < stuArray.length; i++) {
-      console.log("-----step1")
+    for (let student of stuArray) {
       let k = 0;
-      let student = stuArray[i];
-      for (let j = 0; j < response.length; j++) {
-      console.log("-----step2")
-
-        for (let w = 0; w < response[j].data.RollNo.length; w++) {
-          if (student.rollNo == response[j].data.RollNo[w]) {
-      console.log("-----step3")
-
+      console.log(student.rollNo);
+      console.log(prevClass.data.RollNo.includes(student.rollNo));
+      if (prevClass.data.RollNo.includes(String(student.rollNo))) {
+        student["regular"] = true;
+      } else {
+        student["regular"] = false;
+      }
+      for (let resp of response) {
+        for (let rollNo of resp.data.RollNo) {
+          if (student.rollNo == rollNo) {
             k++;
           }
         }
-
       }
-
       totalP += k;
-      stuArray[i]["counts"] = k;
-
-      console.log(stuArray,"UPDATED")
-
+      student["counts"] = k;
       if (classes.totLec == 0) {
-        stuArray[i]["percent"] = 0;
-        
+        student["percent"] = 0;
       } else {
-        stuArray[i]["percent"] = ((k / classes.totLec) * 100)
-          .toFixed(2)
-          .toString();
-        
+        student["percent"] = ((k / classes.totLec) * 100).toFixed(2).toString();
       }
-  
-      
     }
-
-    
-    
-
-    
-
     classes.studentDetails = stuArray;
     
     
-    if (classes.totLec == 0) var totalPercent = 0;
-    else
-      var totalPercent = ((totalP / (classes.totLec * stuArray.length)) * 100)
+    let totalPercent;
+    if (classes.totLec == 0) {
+      totalPercent = 0;
+    } else {
+      totalPercent = ((totalP / (classes.totLec * stuArray.length)) * 100)
         .toFixed(2)
         .toString();
+    }
         
-      let obj = { classroom: classes, stuArray: stuArray, totalPercent: totalPercent, totalP: totalP, prevClass: resp[-2] }
-        
-    res.status(200).json({ success: true, data: obj });
+    let obj = { classroom: classes, stuArray: stuArray, totalPercent: totalPercent, totalP: totalP, prevClasses: resp[-2] }
+    const students = await Student.find({department:'B.Tech Information Technology'})   
+
+    students.sort(dynamicSort("rollNo"));
+    
+    res.status(200).json({ success: true, data: [obj,students] });
 
     
   } catch(error) {

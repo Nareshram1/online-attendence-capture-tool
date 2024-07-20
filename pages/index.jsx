@@ -11,18 +11,20 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { motion } from "framer-motion"
 import Axios from 'axios'
+import Link from 'next/link'
 
 
 
 export default function Index({classes}) {
+  
 
-  const [Open,setOpen] = useState(true);
+  
+  const [Loading,setLoading] = useState(false);
   const router = useRouter()
+  const [Open,setOpen] = useState(true);
   const Menus = [
     {title:"Dashboard",route:"/"},
-    {title:"Reports",icon:<AiOutlineFileText/>,route:"/"},
-    {title:"Media", spacing: true,icon:<BsFillImageFill/>,route:"/"},
-    {title:"Profile",spacing:true,icon:<BsPerson/>,route:"/profile"},
+    // {title:"Profile",icon:<BsPerson/>,route:"/profile"},
     {title:"Logout",icon:<AiOutlineLogout/>,route:"/login"},
   ];
 
@@ -63,7 +65,7 @@ export default function Index({classes}) {
   return (
 
     
-    
+
     <div className='flex overflow-x-hidden bg-slate-100'>
       
       <Head>
@@ -126,9 +128,20 @@ export default function Index({classes}) {
     
 
       <div className='flex flex-col flex-grow bg-light-white p-7'>
+      {Loading?(
+        <div class="absolute right-1/2 bottom-1/2  transform translate-x-1/2 translate-y-1/2 ">
+        <div class="border-t-transparent border-solid animate-spin  rounded-full border-blue-400 border-4 h-20 w-20"></div>
+    </div>
+      ):(
+        <>
+        <div className='flex items-center justify-between'>
         <h1 className='text-2xl font-semibold'>
         Dashboard
         </h1>
+
+        {/* <Link href={"/admin/addCourse"} className='p-2 text-white transition-all duration-100 bg-blue-500 rounded-md shadow-md hover:bg-blue-700'>Add Course</Link> */}
+        </div>
+        
         
         
           <div className='flex flex-wrap items-center gap-4 p-2 pt-2 mt-2 '>
@@ -141,7 +154,9 @@ export default function Index({classes}) {
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.5 }}
               >
-              <div onClick={()=>router.push(`/course/${subject._id}`)} key={index}  className='h-[15rem] ring-1 bg-white ring-slate-900/5  hover:ring-sky-500 rounded-sm overflow-hidden hover:scale-105 transition-all ease-linear hover:cursor-pointer hover:shadow-xl   shadow-lg w-[15rem]'>
+              <Link prefetch href={`/course/${subject._id}`}>
+             
+              <div onClick={()=>setLoading(true)} key={index}  className='h-[15rem] ring-1 bg-white ring-slate-900/5  hover:ring-sky-500 rounded-sm overflow-hidden hover:scale-105 transition-all ease-linear hover:cursor-pointer hover:shadow-xl   shadow-lg w-[15rem]'>
               <div className='w-[100%]  h-[6rem] rounded-sm  relative flex-col flex flex-grow'>
               <Image src={subject.image} className='blur-[1.5px] divide-y divide-slate-200' alt={"subject"} fill />
               <h1 className='absolute p-2 text-xl font-semibold leading-6 text-white duration-200 group hover:underline '> 
@@ -153,29 +168,34 @@ export default function Index({classes}) {
               </h1>
               </div>
               
+              
     
               </div>
+              
+              </Link>
               </motion.div>
              ) 
             })}
           </div>
           
+      </>
+      )}
       
-
       </div>
-
+      
 
     </div>
   )
 }
 
 export async function getServerSideProps(context){
-
+  // console.log(process.env.NODE_ENV)
   try{
-   const {data} = await Axios.post(process.env.host+"/api/classroom",{fid:"63c6cfd516f7067d326af66"})
+   const {data} = await Axios.post((process.env.NODE_ENV == "production" ? process.env.host: "http://localhost:3000")+"/api/classroom",{fid:"63c6cfd516f7067d326af66"})
    return {props: {classes:data.data}}
   }catch(e){
     console.error(e)
+    return {props: {classes:[]}}
   }
 }
 

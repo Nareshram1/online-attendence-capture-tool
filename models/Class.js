@@ -3,13 +3,14 @@ const mongoose = require("mongoose");
 let alphabets = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
 
 const classSchema = new mongoose.Schema({
+  code:{type:String,required:true},
   name: {
     type: String,
     required: true
   },
   description: {
     type: String,
-    required: true
+    default: ''
   },
   handledBy: {
     type: mongoose.Schema.Types.ObjectId, ref: 'User',
@@ -17,9 +18,15 @@ const classSchema = new mongoose.Schema({
   },
   students: [    {
     type: mongoose.Schema.Types.ObjectId, ref: 'User',
-    required:true
+    required:false
     }
   ],
+  commonTo:{
+    type:Array,
+  },
+  courseType:{
+    type:String
+  },
   dateCreated: {
     type: Date,
     default: Date.now
@@ -28,6 +35,12 @@ const classSchema = new mongoose.Schema({
     type: Number,
     required: false,
     default:0
+  },
+  semester:{
+    type:String,
+  },
+  year:{
+    type:String,
   },
   classCode:{
     type:String,
